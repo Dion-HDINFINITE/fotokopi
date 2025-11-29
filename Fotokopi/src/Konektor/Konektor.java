@@ -47,4 +47,8 @@ public class Konektor {
             JOptionPane.showMessageDialog(null, "Error: "+e.getMessage(), "Communication Error", JOptionPane.WARNING_MESSAGE);
         }
     }
+    
+    public Connection getConnection() {
+        return con;
+    }
 }
