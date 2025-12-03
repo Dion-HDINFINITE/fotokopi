@@ -1,18 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Konektor;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author ACER
- */
 public class Konektor {
     private String dbuser = "root";
-    private String dbpassword = "";
+    private String dbpassword = "mysql";
     private Statement stmt;
     private Connection con;
     private ResultSet rs;
@@ -40,15 +32,35 @@ public class Konektor {
         return rs;
     }
     
-    public void query(String SQLString){
+    public boolean query(String SQLString){
         try {
             stmt.executeUpdate(SQLString);
+            return true;
         } catch (Exception e){
             JOptionPane.showMessageDialog(null, "Error: "+e.getMessage(), "Communication Error", JOptionPane.WARNING_MESSAGE);
+            return false;
         }
     }
     
     public Connection getConnection() {
         return con;
+    }
+    
+    public boolean isConnected() {
+        try {
+            return con != null && !con.isClosed();
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+    
+    public void closeConnection() {
+        try {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            System.out.println("Error closing connection: " + e.getMessage());
+        }
     }
 }
