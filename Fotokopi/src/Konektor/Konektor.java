@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 
 public class Konektor {
     private String dbuser = "root";
-    private String dbpassword = "mysql";
+    private String dbpassword = "";
     private Statement stmt;
     private Connection con;
     private ResultSet rs;
