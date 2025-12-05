@@ -142,6 +142,7 @@ public class Login extends javax.swing.JFrame {
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fotokopi/images/inventory.jpg"))); // NOI18N
+        jLabel1.setPreferredSize(new java.awt.Dimension(620, 370));
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-200, 0, 820, 370));
 
         pack();

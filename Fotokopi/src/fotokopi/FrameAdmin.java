@@ -6,6 +6,7 @@ package fotokopi;
 
 import Konektor.Konektor;
 import Logic.BahanBaku;
+import Logic.Saldo;
 
 /**
  *
@@ -25,6 +26,33 @@ public class FrameAdmin extends javax.swing.JFrame {
         styleTableRiwayat();
         loadComboBox();
         tampilStokBarang();
+        tampilSaldo();
+    }
+    
+    public void tampilSaldo() {
+        java.text.NumberFormat kursIndonesia = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("id", "ID"));
+
+        String sql = "SELECT saldo FROM saldo ORDER BY id_keuangan DESC LIMIT 1";
+
+        Konektor myConn = new Konektor();
+        java.sql.ResultSet rs;
+        try {
+            rs = myConn.getData(sql);
+
+            if (rs.next()) {
+                double nilaiSaldo = rs.getDouble("saldo");
+
+                lblSaldo.setText(kursIndonesia.format(nilaiSaldo));
+            } else {
+                lblSaldo.setText(kursIndonesia.format(0));
+            }
+
+            rs.close();
+
+        } catch (Exception e) {
+            System.out.println("Error Cek Saldo: " + e.getMessage());
+            lblSaldo.setText("Rp -"); 
+        }
     }
     
     private void loadComboBox(){
@@ -175,6 +203,8 @@ public class FrameAdmin extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelDashboard = new javax.swing.JTable();
+        lblSaldo = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         panelStok = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -262,6 +292,14 @@ public class FrameAdmin extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tabelDashboard);
 
+        lblSaldo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblSaldo.setForeground(new java.awt.Color(10, 36, 99));
+        lblSaldo.setText("Saldo saat ini");
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(10, 36, 99));
+        jLabel11.setText("Saldo :");
+
         javax.swing.GroupLayout panelDashboardLayout = new javax.swing.GroupLayout(panelDashboard);
         panelDashboard.setLayout(panelDashboardLayout);
         panelDashboardLayout.setHorizontalGroup(
@@ -271,13 +309,17 @@ public class FrameAdmin extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addComponent(jLabel2)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(panelDashboardLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDashboardLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(panelDashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
-                    .addGroup(panelDashboardLayout.createSequentialGroup()
+                .addGroup(panelDashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelDashboardLayout.createSequentialGroup()
                         .addComponent(jLabel5)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panelDashboardLayout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panelDashboardLayout.setVerticalGroup(
@@ -288,9 +330,13 @@ public class FrameAdmin extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelDashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSaldo)
+                    .addComponent(jLabel11))
+                .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -793,7 +839,7 @@ public class FrameAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUpdateMouseExited
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
+        // 1. Ambil Inputan
         String bahanBaku = comboBB.getSelectedItem().toString();
         String textJumlah = fieldJumlah.getText();
         String textKeterangan = ketUpdate.getText(); 
@@ -803,12 +849,14 @@ public class FrameAdmin extends javax.swing.JFrame {
             return;
         }
 
+        // 2. Persiapan Variabel
         String idBahan = "";
         int stokLama = 0;
         int hargaBeli = 0;
+        int idRestockBaru;
 
+        // 3. Ambil Data Bahan Baku
         String sqlSelect = "SELECT id_bahan, stok, harga_beli FROM bahan_baku WHERE nama_bahan = '" + bahanBaku + "'";
-
         Konektor myConn = new Konektor();
         java.sql.ResultSet rs;
 
@@ -823,48 +871,78 @@ public class FrameAdmin extends javax.swing.JFrame {
                 return; 
             }
             rs.close(); 
-
         } catch (Exception e) {
-            System.out.println("Debug : Error saat mengambil data bahan baku - " + e.getMessage());
+            System.out.println("Debug : Error ambil bahan - " + e.getMessage());
             return;
         }
 
         try {
             int jumlahInput = Integer.parseInt(textJumlah);
 
-            int stokTotal = stokLama + jumlahInput;
+            int stokTotal = stokLama + jumlahInput;     
+            int totalBiaya = hargaBeli * jumlahInput;    
 
-            int totalHargaRiwayat = hargaBeli * jumlahInput;
+            
+            Logic.Saldo objSaldo = new Logic.Saldo();
+            int idRowSaldo = objSaldo.ambilIdKeuanganTerakhir();
+            int saldoSekarang = objSaldo.getSaldo(); 
 
-            BahanBaku updBB = new BahanBaku();
-            updBB.setStok(stokTotal);
-            updBB.setNama_bahan(bahanBaku);
-            updBB.updateStok(); 
-
-            try {
+            if (saldoSekarang < totalBiaya) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Saldo tidak cukup untuk restock ini!");
+                return; 
+            } else {
                 java.sql.Connection conn = myConn.getConnection();
                 String sqlInsert = "INSERT INTO riwayat_stok (id_bahan, tanggal, jumlah, harga_total, keterangan) VALUES (?, NOW(), ?, ?, ?)";
 
-                java.sql.PreparedStatement ps = conn.prepareStatement(sqlInsert);
-                ps.setString(1, idBahan);          
-                ps.setInt(2, jumlahInput);         
-                ps.setInt(3, totalHargaRiwayat);   
-                ps.setString(4, textKeterangan);   
+                java.sql.PreparedStatement ps = conn.prepareStatement(sqlInsert, java.sql.Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, idBahan);           
+                ps.setInt(2, jumlahInput);          
+                ps.setInt(3, totalBiaya);    
+                ps.setString(4, textKeterangan);    
 
+                java.sql.ResultSet rsID = ps.getGeneratedKeys();
+                if (rsID.next()) {
+                    idRestockBaru = rsID.getInt(1);
+                }
                 ps.executeUpdate();
                 ps.close();
 
-            } catch (Exception e) {
-                System.out.println("Debug : Gagal simpan riwayat - " + e.getMessage());
+
+                BahanBaku updBB = new BahanBaku();
+                updBB.setStok(stokTotal);
+                updBB.setNama_bahan(bahanBaku);
+                updBB.updateStok(); 
+            }
+            
+            
+
+            try {
+
+                if (saldoSekarang < totalBiaya) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Saldo tidak cukup untuk restock ini!");
+                    return; 
+                }
+
+                int saldoBaru = saldoSekarang - totalBiaya;
+
+                objSaldo.setSaldo(saldoBaru);
+                objSaldo.setStatus(1);
+
+                objSaldo.updateSaldoRestock(idRowSaldo);
+
+            } catch (NumberFormatException e) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Jumlah harus berupa angka!");
             }
 
-            javax.swing.JOptionPane.showMessageDialog(null, "Stok Bertambah & Riwayat Tersimpan!");
+            javax.swing.JOptionPane.showMessageDialog(null, "Stok Bertambah & Saldo Terupdate!");
 
             fieldJumlah.setText("");
             ketUpdate.setText("");
 
-        } catch (NumberFormatException e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Jumlah harus berupa angka!");
+            tampilSaldo(); 
+
+        } catch (Exception e) {
+            System.out.println("Debug : Gagal simpan riwayat - " + e.getMessage());
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
@@ -996,6 +1074,7 @@ public class FrameAdmin extends javax.swing.JFrame {
     private javax.swing.JTextField fieldJumlah;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1013,6 +1092,7 @@ public class FrameAdmin extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea ketUpdate;
+    private javax.swing.JLabel lblSaldo;
     private javax.swing.JPanel panelDashboard;
     private javax.swing.JPanel panelRiwayat;
     private javax.swing.JPanel panelStok;
