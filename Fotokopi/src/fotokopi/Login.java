@@ -189,13 +189,11 @@ public class Login extends javax.swing.JFrame {
                     dispose();
                     FrameAdmin adminFrame = new FrameAdmin();
                     adminFrame.setVisible(true);
-                } else if ("karyawan".equals(role)) {
+                } else {
                     JOptionPane.showMessageDialog(null, "Login berhasil! Selamat datang " + nama);
                     dispose();
                     FrameUser userFrame = new FrameUser(id, nama);
                     userFrame.setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Role tidak dikenali: " + role);
                 }
                 
                 rs.close();
@@ -231,4 +229,8 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JButton registerButton;
     private javax.swing.JTextField usernameField;
     // End of variables declaration//GEN-END:variables
+
+    void setvisible(boolean b) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
