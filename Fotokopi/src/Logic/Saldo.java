@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet; 
 import java.sql.Statement; 
-import java.sql.SQLException;
 
 public class Saldo {
     private int saldo;
@@ -39,18 +38,17 @@ public class Saldo {
     public int ambilIdKeuanganTerakhir() {
         int idPK = 0;
         
-        // Ambil ID Keuangan (PK) dan Saldo
         String sql = "SELECT id_keuangan, saldo FROM saldo ORDER BY id_keuangan DESC LIMIT 1";
         
         try {
             Konektor myConn = new Konektor();
             Connection conn = myConn.getConnection();
-            Statement stmt = conn.createStatement(); // Sekarang ini aman karena sudah pakai java.sql.Statement
+            Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             
             if (rs.next()) {
                 this.saldo = rs.getInt("saldo"); 
-                idPK = rs.getInt("id_keuangan"); // Kita ambil Primary Key-nya
+                idPK = rs.getInt("id_keuangan");
             }
             
             rs.close();
@@ -62,7 +60,7 @@ public class Saldo {
     }
     
     public void updateSaldoRestock(int idRestockBaru){ 
-        String sql = "UPDATE saldo SET saldo = ?, transaksi_terakhir = NOW(), status = ?, id_transaksi = NULL, id_restock = ? WHERE id_keuangan = 1";
+        String sql = "UPDATE saldo SET id_transaksi = NULL, saldo = ?, transaksi_terakhir = NOW(), status = ?, id_transaksi = NULL, id_restock = ? WHERE id_keuangan = 1";
 
         try {
             Konektor myConn = new Konektor();
@@ -73,7 +71,7 @@ public class Saldo {
             ps.setInt(2, this.status);
             ps.setInt(3, idRestockBaru);    
 
-            int rows = ps.executeUpdate(); // Tambahkan int rows untuk cek debug
+            int rows = ps.executeUpdate();
             if (rows > 0) {
                 System.out.println("Debug : Update saldo pengeluaran berhasil");
             } else {
@@ -87,23 +85,41 @@ public class Saldo {
         }
     }
     
-    public void updateSaldo(int id){
-        String sql = "UPDATE saldo SET saldo = ?, status = ? WHERE id_transaksi = ?";
-        try {
-            Konektor myConn = new Konektor();
-            Connection conn = myConn.getConnection(); 
-            PreparedStatement ps = conn.prepareStatement(sql);
-            
-            ps.setInt(1, this.saldo);
-            ps.setInt(2, this.status);
-            ps.setInt(3, id); // 
-            
-            ps.executeUpdate();
-            System.out.println("Debug : Update saldo berhasil");
-            ps.close();
-            
-        } catch (Exception e) {
-            System.out.println("Error saat Update Saldo "+ e);
+    public void updateSaldo(int nominal, String tipe, Integer idTransaksi) {
+
+    String sql = "UPDATE saldo SET saldo = ?, transaksi_terakhir = NOW(), "
+               + "status = ?, id_transaksi = ? "
+               + "WHERE id_keuangan = 1";
+
+    try {
+        Konektor myConn = new Konektor();
+        Connection conn = myConn.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql);
+
+        int saldoBaru;
+
+        if (tipe.equalsIgnoreCase("keluar")) {
+            saldoBaru = this.saldo - nominal;
+            this.status = 1;
+            idTransaksi = null;
+        } 
+        else {
+            saldoBaru = this.saldo + nominal;
+            this.status = 2;
         }
+
+        ps.setInt(1, saldoBaru);
+        ps.setInt(2, this.status);
+        ps.setObject(3, idTransaksi);
+
+        ps.executeUpdate();
+        ps.close();
+
+        System.out.println("Debug: Update saldo (" + tipe + ") berhasil");
+
+    } catch (Exception e) {
+        System.out.println("Error Update Saldo: " + e);
     }
+}
+
 }

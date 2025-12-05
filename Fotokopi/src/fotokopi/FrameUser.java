@@ -1,7 +1,6 @@
 package fotokopi;
 
 import Konektor.Konektor;
-import Logic.BahanBaku;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -877,63 +876,70 @@ public class FrameUser extends javax.swing.JFrame {
 
     private void simpanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpanButtonActionPerformed
         if (modelDaftarBarang.getRowCount() == 0) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Belum ada barang yang ditambahkan!");
-            return;
+        javax.swing.JOptionPane.showMessageDialog(this, "Belum ada barang yang ditambahkan!");
+        return;
+    }
+    
+    String jenisLayanan = "";
+    if (fotokopiButton.isSelected()) {
+        jenisLayanan = "fotokopi";
+    } else if (jilidButton.isSelected()) {
+        jenisLayanan = "jilid";
+    } else if (barangButton.isSelected()) {
+        jenisLayanan = "barang";
+    }
+
+    Konektor myConn = new Konektor();
+
+    try {
+        java.sql.Connection conn = myConn.getConnection();
+
+        String sqlTransaksi = 
+            "INSERT INTO transaksi (id_user, tanggal, jenis_layanan, jumlah_satuan, total_biaya) " +
+            "VALUES (?, NOW(), ?, ?, ?)";
+
+        PreparedStatement psTransaksi = conn.prepareStatement(sqlTransaksi, java.sql.Statement.RETURN_GENERATED_KEYS);
+
+        int totalSatuan = 0;
+        for (int i = 0; i < modelDaftarBarang.getRowCount(); i++) {
+            totalSatuan += Integer.parseInt(modelDaftarBarang.getValueAt(i, 1).toString());
         }
-        
-        String jenisLayanan = "";
-        if (fotokopiButton.isSelected()) {
-            jenisLayanan = "fotokopi";
-        } else if (jilidButton.isSelected()) {
-            jenisLayanan = "jilid";
-        } else if (barangButton.isSelected()) {
-            jenisLayanan = "barang";
+
+        psTransaksi.setInt(1, idUser);
+        psTransaksi.setString(2, jenisLayanan);
+        psTransaksi.setInt(3, totalSatuan);
+        psTransaksi.setInt(4, totalTransaksi);
+
+        psTransaksi.executeUpdate();
+
+        java.sql.ResultSet generatedKeys = psTransaksi.getGeneratedKeys();
+        int idTransaksi = 0;
+        if (generatedKeys.next()) {
+            idTransaksi = generatedKeys.getInt(1);
         }
-        
-        Konektor myConn = new Konektor();
-        
-        try {
-            java.sql.Connection conn = myConn.getConnection();
-            
-            String sqlTransaksi = "INSERT INTO transaksi (id_user, tanggal, jenis_layanan, jumlah_satuan, total_biaya) VALUES (?, NOW(), ?, ?, ?)";
-            PreparedStatement psTransaksi = conn.prepareStatement(sqlTransaksi, java.sql.Statement.RETURN_GENERATED_KEYS);
-            
-            int totalSatuan = 0;
-            for (int i = 0; i < modelDaftarBarang.getRowCount(); i++) {
-                totalSatuan += Integer.parseInt(modelDaftarBarang.getValueAt(i, 1).toString());
-            }
-            
-            psTransaksi.setInt(1, idUser);
-            psTransaksi.setString(2, jenisLayanan);
-            psTransaksi.setInt(3, totalSatuan);
-            psTransaksi.setInt(4, totalTransaksi);
-            
-            psTransaksi.executeUpdate();
-            
-            java.sql.ResultSet generatedKeys = psTransaksi.getGeneratedKeys();
-            int idTransaksi = 0;
-            if (generatedKeys.next()) {
-                idTransaksi = generatedKeys.getInt(1);
-            }
-            
-            for (int i = 0; i < modelDaftarBarang.getRowCount(); i++) {
-                String namaBarang = modelDaftarBarang.getValueAt(i, 0).toString();
-                int jumlah = Integer.parseInt(modelDaftarBarang.getValueAt(i, 1).toString());
-                
-                kurangiStok(namaBarang, jumlah);
-            }
-            
-            psTransaksi.close();
-            
-            javax.swing.JOptionPane.showMessageDialog(null, "Transaksi berhasil disimpan!");
-            
-            btnResetActionPerformed(null);
-            tampilKinerjaMingguan();
-            
-        } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-            System.out.println("Error simpan transaksi: " + e.getMessage());
+
+        for (int i = 0; i < modelDaftarBarang.getRowCount(); i++) {
+            String namaBarang = modelDaftarBarang.getValueAt(i, 0).toString();
+            int jumlah = Integer.parseInt(modelDaftarBarang.getValueAt(i, 1).toString());
+            kurangiStok(namaBarang, jumlah);
         }
+
+        Logic.Saldo objSaldo = new Logic.Saldo();
+        objSaldo.ambilIdKeuanganTerakhir(); 
+        objSaldo.setStatus(2);
+        objSaldo.updateSaldo(totalTransaksi, "masuk", idTransaksi);
+
+psTransaksi.close();
+
+        javax.swing.JOptionPane.showMessageDialog(null, "Transaksi berhasil disimpan!");
+
+        btnResetActionPerformed(null);
+        tampilKinerjaMingguan();
+
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        System.out.println("Error simpan transaksi: " + e.getMessage());
+    }
     }//GEN-LAST:event_simpanButtonActionPerformed
 
     private void plusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plusButtonActionPerformed

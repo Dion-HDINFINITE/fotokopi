@@ -1,6 +1,5 @@
 package fotokopi;
 
-import java.awt.*;
 import javax.swing.*;
 import Konektor.*;
 import java.sql.*;

@@ -1,28 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package fotokopi;
 
 import Konektor.Konektor;
 import Logic.BahanBaku;
-<<<<<<< HEAD
 import javax.swing.JOptionPane;
-=======
-import Logic.Saldo;
->>>>>>> f4e415dbd890540f4cd586bc3f6a360185816663
 
-/**
- *
- * @author ACER
- */
 public class FrameAdmin extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrameAdmin.class.getName());
 
-    /**
-     * Creates new form FrameAdmin
-     */
     public FrameAdmin() {
         initComponents();
         
@@ -84,33 +69,26 @@ public class FrameAdmin extends javax.swing.JFrame {
     }
 
     private void styleTableDashboard() {
-        // 1. Ambil Objek Header Tabel
         javax.swing.table.JTableHeader header = tabelDashboard.getTableHeader();
 
 
-        header.setOpaque(false); // Agar warna menimpa tema bawaan
+        header.setOpaque(false);
 
-        // 3. Ubah Warna Body Tabel
-        tabelDashboard.setBackground(new java.awt.Color(255, 250, 255)); // Putih/Magnolia
-        tabelDashboard.setForeground(new java.awt.Color(10, 36, 99));    // Teks Navy
-        tabelDashboard.setGridColor(new java.awt.Color(200, 200, 200));  // Garis abu tipis
-        tabelDashboard.setRowHeight(30); // Agar baris lebih lega dan nyaman dibaca
+        tabelDashboard.setBackground(new java.awt.Color(255, 250, 255));
+        tabelDashboard.setForeground(new java.awt.Color(10, 36, 99));
+        tabelDashboard.setGridColor(new java.awt.Color(200, 200, 200));
+        tabelDashboard.setRowHeight(30);
 
-        // 4. Ubah Warna Saat Baris DIKLIK (Selection Color) - Pakai Sky Blue
         tabelDashboard.setSelectionBackground(new java.awt.Color(255, 250, 255));
         tabelDashboard.setSelectionForeground(new java.awt.Color(10, 36, 99));
 
-        // 5. Hilangkan Background Abu-abu di sisa tabel yang kosong
         jScrollPane1.getViewport().setBackground(new java.awt.Color(255, 250, 255));
 
-        // 6. Hilangkan Border fokus (garis kotak tipis saat diklik)
-        tabelDashboard.setShowVerticalLines(false); // Opsional: Hilangkan garis vertikal biar clean
+        tabelDashboard.setShowVerticalLines(false);
 
-        // 2. TIMPA RENDERER BAWAAN (Ini kuncinya agar warna Navy muncul)
         header.setDefaultRenderer(new javax.swing.table.DefaultTableCellRenderer() {
             @Override
             public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                // Panggil komponen label dasar
                 javax.swing.JLabel label = (javax.swing.JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
                 // --- SETTING WARNA ---
@@ -123,48 +101,38 @@ public class FrameAdmin extends javax.swing.JFrame {
                 // Font: Segoe UI Bold 12
                 label.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
 
-                // (Opsional) Beri sedikit jarak (Padding) biar teks tidak mepet pinggir
                 label.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-                // (Opsional) Rata Kiri
                 label.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
                 return label;
             }
         });
 
-        // 3. Pastikan Header tidak "Reorderable" (biar user gak iseng geser2 kolom) - Opsional
         header.setReorderingAllowed(false);
     }
     
     private void styleTableRiwayat() {
-        // 1. Ambil Objek Header Tabel
         javax.swing.table.JTableHeader header = tabelRiwayat.getTableHeader();
 
 
-        header.setOpaque(false); // Agar warna menimpa tema bawaan
+        header.setOpaque(false);
 
-        // 3. Ubah Warna Body Tabel
         tabelRiwayat.setBackground(new java.awt.Color(255, 250, 255)); // Putih/Magnolia
         tabelRiwayat.setForeground(new java.awt.Color(10, 36, 99));    // Teks Navy
         tabelRiwayat.setGridColor(new java.awt.Color(200, 200, 200));  // Garis abu tipis
-        tabelRiwayat.setRowHeight(30); // Agar baris lebih lega dan nyaman dibaca
+        tabelRiwayat.setRowHeight(30);
 
-        // 4. Ubah Warna Saat Baris DIKLIK (Selection Color) - Pakai Sky Blue
         tabelRiwayat.setSelectionBackground(new java.awt.Color(255, 250, 255));
         tabelRiwayat.setSelectionForeground(new java.awt.Color(10, 36, 99));
 
-        // 5. Hilangkan Background Abu-abu di sisa tabel yang kosong
         jScrollPane3.getViewport().setBackground(new java.awt.Color(255, 250, 255));
 
-        // 6. Hilangkan Border fokus (garis kotak tipis saat diklik)
         tabelRiwayat.setShowVerticalLines(false); // Opsional: Hilangkan garis vertikal biar clean
 
-        // 2. TIMPA RENDERER BAWAAN (Ini kuncinya agar warna Navy muncul)
         header.setDefaultRenderer(new javax.swing.table.DefaultTableCellRenderer() {
             @Override
             public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                // Panggil komponen label dasar
                 javax.swing.JLabel label = (javax.swing.JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
                 // --- SETTING WARNA ---
@@ -177,25 +145,17 @@ public class FrameAdmin extends javax.swing.JFrame {
                 // Font: Segoe UI Bold 12
                 label.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
 
-                // (Opsional) Beri sedikit jarak (Padding) biar teks tidak mepet pinggir
                 label.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-                // (Opsional) Rata Kiri
                 label.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
                 return label;
             }
         });
 
-        // 3. Pastikan Header tidak "Reorderable" (biar user gak iseng geser2 kolom) - Opsional
         header.setReorderingAllowed(false);
     }
     
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -321,10 +281,10 @@ public class FrameAdmin extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelDashboardLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(panelDashboardLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelDashboardLayout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lblSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panelDashboardLayout.setVerticalGroup(
@@ -869,111 +829,122 @@ public class FrameAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUpdateMouseExited
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // 1. Ambil Inputan
-        String bahanBaku = comboBB.getSelectedItem().toString();
-        String textJumlah = fieldJumlah.getText();
-        String textKeterangan = ketUpdate.getText(); 
+    // 1. Ambil Inputan
+    String bahanBaku = comboBB.getSelectedItem().toString();
+    String textJumlah = fieldJumlah.getText();
+    String textKeterangan = ketUpdate.getText(); 
 
-        if (textJumlah.isEmpty() || bahanBaku.equals("-- Pilih Bahan --")) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Mohon lengkapi data!");
+    if (textJumlah.isEmpty() || bahanBaku.equals("-- Pilih Bahan --")) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Mohon lengkapi data!");
+        return;
+    }
+
+    // 2. Persiapan Variabel
+    String idBahan = "";
+    int stokLama = 0;
+    int hargaBeli = 0;
+    int idRestockBaru = -1;
+
+    // 3. Ambil Data Bahan Baku
+    String sqlSelect = "SELECT id_bahan, stok, harga_beli FROM bahan_baku WHERE nama_bahan = ?";
+    Konektor myConn = new Konektor();
+    java.sql.ResultSet rs = null;
+    java.sql.Connection conn = null;
+    java.sql.PreparedStatement ps = null;
+
+    try {
+        conn = myConn.getConnection();
+        ps = conn.prepareStatement(sqlSelect);
+        ps.setString(1, bahanBaku);
+        rs = ps.executeQuery();
+
+        if (rs.next()) {
+            idBahan = rs.getString("id_bahan");
+            stokLama = rs.getInt("stok");
+            hargaBeli = rs.getInt("harga_beli");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Bahan tidak ditemukan!");
+            return; 
+        }
+    } catch (Exception e) {
+        System.out.println("Debug : Error ambil bahan - " + e.getMessage());
+        return;
+    } finally {
+        try { if (rs != null) rs.close(); } catch (Exception ignored) {}
+        try { if (ps != null) ps.close(); } catch (Exception ignored) {}
+    }
+
+    try {
+        int jumlahInput = Integer.parseInt(textJumlah);
+
+        int stokTotal = stokLama + jumlahInput;     
+        int totalBiaya = hargaBeli * jumlahInput;    
+
+        Logic.Saldo objSaldo = new Logic.Saldo();
+
+        objSaldo.ambilIdKeuanganTerakhir(); 
+
+        int saldoSekarang = objSaldo.getSaldo();
+
+        if (saldoSekarang < totalBiaya) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Saldo tidak cukup untuk restock ini!");
             return;
         }
 
-        // 2. Persiapan Variabel
-        String idBahan = "";
-        int stokLama = 0;
-        int hargaBeli = 0;
-        int idRestockBaru;
-
-        // 3. Ambil Data Bahan Baku
-        String sqlSelect = "SELECT id_bahan, stok, harga_beli FROM bahan_baku WHERE nama_bahan = '" + bahanBaku + "'";
-        Konektor myConn = new Konektor();
-        java.sql.ResultSet rs;
+        // --- Simpan riwayat_stok dan ambil generated key ---
+        String sqlInsert = "INSERT INTO riwayat_stok (id_bahan, tanggal, jumlah, harga_total, keterangan) VALUES (?, NOW(), ?, ?, ?)";
+        java.sql.PreparedStatement psInsert = null;
+        java.sql.ResultSet rsID = null;
 
         try {
-            rs = myConn.getData(sqlSelect);
-            if (rs.next()) {
-                idBahan = rs.getString("id_bahan");
-                stokLama = rs.getInt("stok");
-                hargaBeli = rs.getInt("harga_beli");
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Bahan tidak ditemukan!");
-                return; 
-            }
-            rs.close(); 
-        } catch (Exception e) {
-            System.out.println("Debug : Error ambil bahan - " + e.getMessage());
-            return;
-        }
+            psInsert = conn.prepareStatement(sqlInsert, java.sql.Statement.RETURN_GENERATED_KEYS);
+            psInsert.setString(1, idBahan);           
+            psInsert.setInt(2, jumlahInput);          
+            psInsert.setInt(3, totalBiaya);    
+            psInsert.setString(4, textKeterangan);    
 
-        try {
-            int jumlahInput = Integer.parseInt(textJumlah);
+            int affected = psInsert.executeUpdate();
 
-            int stokTotal = stokLama + jumlahInput;     
-            int totalBiaya = hargaBeli * jumlahInput;    
-
-            
-            Logic.Saldo objSaldo = new Logic.Saldo();
-            int idRowSaldo = objSaldo.ambilIdKeuanganTerakhir();
-            int saldoSekarang = objSaldo.getSaldo(); 
-
-            if (saldoSekarang < totalBiaya) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Saldo tidak cukup untuk restock ini!");
-                return; 
-            } else {
-                java.sql.Connection conn = myConn.getConnection();
-                String sqlInsert = "INSERT INTO riwayat_stok (id_bahan, tanggal, jumlah, harga_total, keterangan) VALUES (?, NOW(), ?, ?, ?)";
-
-                java.sql.PreparedStatement ps = conn.prepareStatement(sqlInsert, java.sql.Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, idBahan);           
-                ps.setInt(2, jumlahInput);          
-                ps.setInt(3, totalBiaya);    
-                ps.setString(4, textKeterangan);    
-
-                java.sql.ResultSet rsID = ps.getGeneratedKeys();
-                if (rsID.next()) {
+            if (affected > 0) {
+                rsID = psInsert.getGeneratedKeys();
+                if (rsID != null && rsID.next()) {
                     idRestockBaru = rsID.getInt(1);
                 }
-                ps.executeUpdate();
-                ps.close();
-
-
-                BahanBaku updBB = new BahanBaku();
-                updBB.setStok(stokTotal);
-                updBB.setNama_bahan(bahanBaku);
-                updBB.updateStok(); 
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Gagal menyimpan riwayat restock!");
+                return;
             }
-            
-            
-
-            try {
-
-                if (saldoSekarang < totalBiaya) {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Saldo tidak cukup untuk restock ini!");
-                    return; 
-                }
-
-                int saldoBaru = saldoSekarang - totalBiaya;
-
-                objSaldo.setSaldo(saldoBaru);
-                objSaldo.setStatus(1);
-
-                objSaldo.updateSaldoRestock(idRowSaldo);
-
-            } catch (NumberFormatException e) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Jumlah harus berupa angka!");
-            }
-
-            javax.swing.JOptionPane.showMessageDialog(null, "Stok Bertambah & Saldo Terupdate!");
-
-            fieldJumlah.setText("");
-            ketUpdate.setText("");
-
-            tampilSaldo(); 
-
-        } catch (Exception e) {
-            System.out.println("Debug : Gagal simpan riwayat - " + e.getMessage());
+        } finally {
+            try { if (rsID != null) rsID.close(); } catch (Exception ignored) {}
+            try { if (psInsert != null) psInsert.close(); } catch (Exception ignored) {}
         }
+
+        // --- Update stok bahan ---
+        BahanBaku updBB = new BahanBaku();
+        updBB.setStok(stokTotal);
+        updBB.setNama_bahan(bahanBaku);
+        updBB.updateStok(); 
+
+        // --- Update saldo ---
+        int saldoBaru = saldoSekarang - totalBiaya;
+        objSaldo.setSaldo(saldoBaru);
+        objSaldo.setStatus(1);
+        objSaldo.updateSaldo(totalBiaya, "keluar", null);
+
+        javax.swing.JOptionPane.showMessageDialog(null, "Stok Bertambah & Saldo Terupdate!");
+
+        fieldJumlah.setText("");
+        ketUpdate.setText("");
+
+        tampilSaldo(); 
+
+    } catch (NumberFormatException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Jumlah harus berupa angka!");
+    } catch (Exception e) {
+        System.out.println("Debug : Gagal simpan riwayat - " + e.getMessage());
+    } finally {
+        try { if (conn != null) conn.close(); } catch (Exception ignored) {}
+    }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnUpdateMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateMousePressed
@@ -1136,11 +1107,8 @@ public class FrameAdmin extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea ketUpdate;
-<<<<<<< HEAD
-    private javax.swing.JButton logoutButton;
-=======
     private javax.swing.JLabel lblSaldo;
->>>>>>> f4e415dbd890540f4cd586bc3f6a360185816663
+    private javax.swing.JButton logoutButton;
     private javax.swing.JPanel panelDashboard;
     private javax.swing.JPanel panelRiwayat;
     private javax.swing.JPanel panelStok;
